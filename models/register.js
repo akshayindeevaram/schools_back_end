@@ -1,4 +1,4 @@
-const makeDb = require("../controllers/db");
+const makeDb = require("../libraries/db");
 const bcrypt = require('bcryptjs');
 // const { query } = require("express");
 
@@ -17,7 +17,7 @@ async function registerModel(firstName,lastName,email,password,confirmpassword) 
   //     })
   //   }else if (password !== confirmpassword){
   //     return results.render('register',{
-  //       message: 'Passwords do not match'
+  //       message: 'Passwords do not match'models/register.js
   //     })
   //   }
   //   let hashedPassword = await bcrypt.hash(password, 8);
@@ -34,19 +34,17 @@ async function registerModel(firstName,lastName,email,password,confirmpassword) 
   //   })
   // } )
 
-
-
-
-  //
-
   try {
-    // const createtable = await db.query("CREATE TABLE registration(id int primary key auto_increment, first_name varchar(20), last_name varchar(20), email varchar(20), password varchar(20))");
+    
     const insertQuery = await db.query(`INSERT INTO registration (first_name,last_name,email,password) VALUES 
     ('${firstName}','${lastName}','${email}','${password}')`);
     console.log(insertQuery,"55555");
-    // console.log("fffffffffffffffffffffffffff");
-    
+    return true;
+
   } catch (err) {
+    console.log(err);
+    return false;
+
   } finally {
     await db.close();
   }
@@ -56,20 +54,22 @@ async function registerModel(firstName,lastName,email,password,confirmpassword) 
 async function loginModel(email,password){
   console.log(email,password,":login details");
      const db = makeDb();
+     
   try{
     const checkUserQuery = `SELECT email, password FROM registration WHERE email='${email}' AND password='${password}'`;
     const selectQuery = await db.query(checkUserQuery);
     // const selectQuery = await db.query ();
     console.log(selectQuery,"66666");
-  const user=selectQuery[0] 
+    const user=selectQuery[0];
   // console.log(user);
-    return user
-}
+    return user;
+  } 
   
-  catch (err){
-
+  catch (err) {
     console.log(err);
-  }finally{
+    return false;
+
+  } finally {
     await db.close();
   }
 }
