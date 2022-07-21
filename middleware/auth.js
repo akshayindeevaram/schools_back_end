@@ -1,13 +1,24 @@
-const jwt = require("jsonwebtoken");
+const jwt=require('jsonwebtoken')
 
-function auth (req,res,next){
-    const token = req.header('auth-token');
-    if(!token) return res.status(401).send('Access Denied');
-
-    try{
-        const verified = jwt.verify(token, process.env.TOKEN_SECRET);
-        req.user = verified;
-    }catch (err){
-        res.status(400).send('Invalid Token');
+function  verifyToken(req, res, next){
+    try {
+      console.log("verifyToken");
+      const bearerHeader = req.headers['authorization'];
+      // console.log(bearerHeader,"aaaaaaaaaaaaaaaaaaaaaa");
+      if(typeof bearerHeader !== 'undefined'){
+        const bearer = bearerHeader.split(' ');
+        const bearerToken = bearer[1];
+        // console.log(bearerToken,"bbbbbbbbbbbbbbb");
+       const user= jwt.verify(bearerToken,"secretkey")
+       req.user={email:user.email}
+       next();
+      }else{
+      return res.json({ success: false, message: 'verification failed.' }).status(401);
+      }
+    } catch (err) {
+      return res.json({ success: false, message: 'Failed to verify.' }).status(500); 
     }
-}
+  
+  }
+  
+  module.exports = verifyToken;
