@@ -1,11 +1,12 @@
 const express = require("express");
 const about = require("../controllers/about");
 const admission = require("../controllers/admission");
+const viewadmission = require("../controllers/viewAdmisison");
+const viewuseradmission = require("../controllers/viewUserAdmisison");
 const verifyToken = require("../middleware/auth");
 const path= require('path')
 const fs = require('fs');
-const Router = express.Router()
-// const importController = require('../controllers/admission');
+const Router = express.Router();
 
 const multer  = require('multer');
 const BASE_DIR = path.join(process.cwd());
@@ -23,18 +24,20 @@ const storage = multer.diskStorage({
     const value=Date.now() + path.extname(file.originalname);
     // console.log(value,"ggggggggggggggg");
     cb(null, value)
-    
-    // cb(null, file.fieldname);
   }
 })
 const upload = multer({storage : storage }).single('resultfile');
 // console.log(upload,"ccccccccc");
 
 
-Router.get('/about', verifyToken, about);
+Router.get('/about', about);
 Router.post('/admission',verifyToken,upload, admission);
 
 // Router.post('/file_upload', upload, admission);
+
+
+Router.get('/viewadmission', viewadmission);
+Router.get('/viewuseradmission', viewuseradmission);
 
 
 module.exports = Router;

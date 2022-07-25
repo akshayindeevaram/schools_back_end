@@ -5,6 +5,8 @@ const app = express();
 const register = require("./routes/auth");
 const about = require("./routes/content");
 const admission = require("./routes/content");
+const viewadmission = require("./routes/content")
+const viewuseradmission = require("./routes/content")
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 
@@ -33,6 +35,9 @@ app.get("/", (req, res) => {
 app.use("/api/v1", register);
 app.use("/api/v1", about);
 app.use("/api/v1", admission);
+
+app.use("api/v1", viewadmission);
+app.use("api/v1", viewuseradmission);
 
 app.listen(5000, () => {
   console.log("Server running on port 5000");

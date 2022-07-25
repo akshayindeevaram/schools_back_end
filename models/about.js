@@ -6,7 +6,7 @@ async function aboutModel(){
 
     try{
     const checkAbout = 'SELECT main_heading, description FROM about'; 
-    // console.log(checkAbout);
+    console.log(checkAbout,"ffffffffffffffffffff");
     const selectAbout = await db.query(checkAbout);
 
     
