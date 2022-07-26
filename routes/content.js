@@ -30,7 +30,7 @@ const upload = multer({storage : storage }).single('resultfile');
 // console.log(upload,"ccccccccc");
 
 
-Router.get('/about', about);
+Router.get('/about',verifyToken, about);
 Router.post('/admission',verifyToken,upload, admission);
 
 // Router.post('/file_upload', upload, admission);
